@@ -30,13 +30,11 @@ public class EdenAIClient {
     }
 
     public Map<String, Object>  getResumeMetadata(ByteArrayResource file){
-
         log.info("Eden ai providers:{}", edenAIProperties.getProviders());
         log.info("Eden ai url:{}", edenAIProperties.getUrl());
         log.info("Eden ai token:{}", edenAIProperties.getToken());
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-//            headers.setBearerAuth(edenAIProperties.getToken());
             headers.setBearerAuth(edenAIProperties.getToken());
 
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
@@ -46,6 +44,7 @@ public class EdenAIClient {
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
             ResponseEntity<Map> responseEntity = restTemplate.postForEntity(edenAIProperties.getUrl(), requestEntity, Map.class);
+
             return responseEntity.getBody();
 
     }

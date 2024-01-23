@@ -11,6 +11,6 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 class ReasonCode implements Serializable {
 
-    private String code;
+    private int code;
     private String message;
 }
