@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Map;
 
 @Slf4j
@@ -24,7 +22,6 @@ public class EdenAIClient {
     private final RestTemplate restTemplate;
     private final EdenAIProperties edenAIProperties;
 
-    private final String EDENAITOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZDQ2NzQ3ZWQtMTk3NC00Y2YzLThkNDYtZDFmNzg2ODMxNmM5IiwidHlwZSI6ImFwaV90b2tlbiJ9.AiO_28Lv-MK08lyAP8Mi-ilwPjufbSaJV9ghU5HGvMw";
 
     @Autowired
     public EdenAIClient(RestTemplate restTemplate, EdenAIProperties edenAIProperties) {
@@ -40,7 +37,7 @@ public class EdenAIClient {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 //            headers.setBearerAuth(edenAIProperties.getToken());
-            headers.setBearerAuth(EDENAITOKEN);
+            headers.setBearerAuth(edenAIProperties.getToken());
 
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
             body.add("providers", String.join(",", edenAIProperties.getProviders()));
