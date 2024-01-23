@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: gateway-claim
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: Ar3w3s@f3
+    url: jdbc:postgresql://localhost:5432/legalos
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+server:
+  port: 8082
+
+edenai:
+  url: https://api.edenai.run/v2/ocr/resume_parser
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZDQ2NzQ3ZWQtMTk3NC00Y2YzLThkNDYtZDFmNzg2ODMxNmM5IiwidHlwZSI6ImFwaV90b2tlbiJ9.AiO_28Lv-MK08lyAP8Mi-ilwPjufbSaJV9ghU5HGvMw
+  providers:
+    - senseloaf
+    - affinda
