@@ -6,7 +6,6 @@ import com.legolas.cvpasrser.domain.dto.resumeData.*;
 import com.legolas.cvpasrser.repository.*;
 import com.legolas.cvpasrser.service.SaveResumeDataService;
 import com.legolas.cvpasrser.utils.Utils;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,29 +22,28 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class SaveResumeData implements SaveResumeDataService {
 
-    @Autowired
     private final ObjectMapper mapper;
-
-    @Autowired
     private final ResumeDataRepository resumeDataRepository;
-
-    @Autowired
     private final PersonalInformationRepository personalInformationRepository;
-
-    @Autowired
     private final EducationRepository educationRepository;
-
-    @Autowired
     private final WorkExperienceRepository workExperienceRepository;
-
-    @Autowired
     private final SkillRepository skillRepository;
+    private final LanguageRepository languageRepository;
 
     @Autowired
-    private final LanguageRepository languageRepository;
+    public SaveResumeData(ObjectMapper mapper, ResumeDataRepository resumeDataRepository, PersonalInformationRepository personalInformationRepository,
+                          EducationRepository educationRepository, WorkExperienceRepository workExperienceRepository, SkillRepository skillRepository,
+                          LanguageRepository languageRepository) {
+        this.mapper = mapper;
+        this.resumeDataRepository = resumeDataRepository;
+        this.personalInformationRepository = personalInformationRepository;
+        this.educationRepository = educationRepository;
+        this.workExperienceRepository = workExperienceRepository;
+        this.skillRepository = skillRepository;
+        this.languageRepository = languageRepository;
+    }
 
 
     @Override
@@ -55,12 +53,12 @@ public class SaveResumeData implements SaveResumeDataService {
             //making use of eden-ai body as it combines outputs from the different providers to give a more refined response
             String extractedJsonData = responseDataJsonObject.getJSONObject("eden-ai").getJSONObject("extracted_data").toString();
             ExtractedDataDTO extractedData = mapper.readValue(extractedJsonData, ExtractedDataDTO.class);
-            ResumeDataEntity resumeDataEntity = saveResumeExtractedData(extractedJsonData, resume);
-            savePersonalInformation(resumeDataEntity, extractedData.getPersonalInfos());
-            saveLanguage(resumeDataEntity, extractedData.getLanguages());
-            saveSkills(resumeDataEntity, extractedData.getSkills());
-            saveWorkExperience(resumeDataEntity, extractedData.getWorkExperience());
-            saveEducation(resumeDataEntity, extractedData.getEducation());
+            ResumeData resumeData = saveResumeExtractedData(extractedJsonData, resume);
+            savePersonalInformation(resumeData, extractedData.getPersonalInfos());
+            saveLanguage(resumeData, extractedData.getLanguages());
+            saveSkills(resumeData, extractedData.getSkills());
+            saveWorkExperience(resumeData, extractedData.getWorkExperience());
+            saveEducation(resumeData, extractedData.getEducation());
             return extractedData;
         } catch (IOException exception) {
             log.info(String.format("Error saving data to DB: %s", exception.getMessage()));
@@ -70,76 +68,72 @@ public class SaveResumeData implements SaveResumeDataService {
 
     }
 
-    private void saveEducation(ResumeDataEntity resumeDataEntity, EducationDTO education) {
+
+    private void saveEducation(ResumeData resumeData, EducationDTO education) {
         if (Objects.isNull(education) || Objects.isNull(education.getEntries()))
             return;
 
-        List<EducationEntity> educationEntities = education.getEntries().stream().map(entry -> {
-                    return EducationEntity.builder()
+        List<Education> educationEntities = education.getEntries()
+                .stream()
+                .map(entry -> Education.builder()
                             .study(entry.getAccreditation())
                             .school(entry.getEstablishment())
                             .startDate(Utils.stringToLocalDate(entry.getStartDate()))
                             .endDate(Utils.stringToLocalDate(entry.getEndDate()))
-                            .resumeDataEntity(resumeDataEntity)
-                            .build();
-                }
-
-        ).collect(Collectors.toList());
+                            .resumeData(resumeData)
+                            .build()
+                ).collect(Collectors.toList());
         educationRepository.saveAll(educationEntities);
 
     }
 
-    private void saveWorkExperience(ResumeDataEntity resumeDataEntity, WorkExperienceDTO workExperience) {
+    private void saveWorkExperience(ResumeData resumeData, WorkExperienceDTO workExperience) {
         if (Objects.isNull(workExperience) || Objects.isNull(workExperience.getEntries()))
             return;
 
-        List<WorkExperienceEntity> workExperienceEntity = workExperience.getEntries()
-                .stream().map(entry -> {
-                    return WorkExperienceEntity.builder()
-                            .company(entry.getCompany())
-                            .location(entry.getLocation() == null ? null : entry.getLocation().getFormattedLocation())
-                            .title(entry.getTitle())
-                            .startDate(Utils.stringToLocalDate(entry.getStartDate()))
-                            .endDate(Utils.stringToLocalDate(entry.getEndDate()))
-                            .build();
-                }).collect(Collectors.toList());
-
+        List<WorkExperience> workExperienceEntity = workExperience.getEntries()
+                .stream().map(entry -> WorkExperience.builder()
+                        .company(entry.getCompany())
+                        .location(entry.getLocation() == null ? null : entry.getLocation().getFormattedLocation())
+                        .title(entry.getTitle())
+                        .resumeData(resumeData)
+                        .startDate(Utils.stringToLocalDate(entry.getStartDate()))
+                        .endDate(Utils.stringToLocalDate(entry.getEndDate()))
+                        .build()).collect(Collectors.toList());
         workExperienceRepository.saveAll(workExperienceEntity);
     }
 
-    private void saveSkills(ResumeDataEntity resumeDataEntity, ArrayList<SkillDTO> skills) {
+    private void saveSkills(ResumeData resumeData, ArrayList<SkillDTO> skills) {
         if (Objects.isNull(skills) || skills.size() == 0)
             return;
 
-        List<SkillEntity> skillEntities = skills.stream().map(
-                skill -> {
-                    return SkillEntity.builder()
-                            .resumeDataEntity(resumeDataEntity)
-                            .skill(skill.getName())
-                            .type(skill.getType())
-                            .build();
-                }
+        List<Skill> skillEntities = skills.stream().map(
+                skill -> Skill.builder()
+                        .resumeData(resumeData)
+                        .skill(skill.getName())
+                        .type(skill.getType())
+                        .build()
+
         ).collect(Collectors.toList());
         skillRepository.saveAll(skillEntities);
     }
 
-    private void saveLanguage(ResumeDataEntity resumeDataEntity, ArrayList<LanguageDTO> languages) {
+    private void saveLanguage(ResumeData resumeData, ArrayList<LanguageDTO> languages) {
         if (Objects.isNull(languages) || languages.size() == 0)
             return;
 
-        List<LanguageEntity> languageEntities = languages.stream()
-                .map(language -> {
-                    return LanguageEntity.builder()
-                            .language(language.getName())
-                            .resumeDataEntity(resumeDataEntity)
-                            .build();
-                }).collect(Collectors.toList());
+        List<Language> languageEntities = languages.stream()
+                .map(language -> Language.builder()
+                        .language(language.getName())
+                        .resumeData(resumeData)
+                        .build()
+                ).collect(Collectors.toList());
         languageRepository.saveAll(languageEntities);
     }
 
-    private void savePersonalInformation(ResumeDataEntity resumeDataEntity, PersonalInfosDTO personalInfos) {
-        PersonalInformationEntity personalInformationEntity = PersonalInformationEntity.builder()
-                .resumeDataEntity(resumeDataEntity)
+    private void savePersonalInformation(ResumeData resumeData, PersonalInfosDTO personalInfos) {
+        PersonalInformation personalInformation = PersonalInformation.builder()
+                .resumeData(resumeData)
                 .phone(personalInfos.getPhones() == null ? null : personalInfos.getPhones().get(0))
                 .email(personalInfos.getMails() == null ? null : personalInfos.getMails().get(0))
                 .address(personalInfos.getAddress() == null ? null : personalInfos.getAddress().getFormattedLocation())
@@ -147,17 +141,17 @@ public class SaveResumeData implements SaveResumeDataService {
                 .lastName(personalInfos.getName() == null ? null : personalInfos.getName().getLastName())
                 .profileSummary(personalInfos.getSelfSummary())
                 .build();
-        personalInformationRepository.save(personalInformationEntity);
+        personalInformationRepository.save(personalInformation);
     }
 
-    private ResumeDataEntity saveResumeExtractedData(String edenAIJson, MultipartFile resume) throws IOException {
-        ResumeDataEntity resumeDataEntity = ResumeDataEntity.builder()
+    private ResumeData saveResumeExtractedData(String edenAIJson, MultipartFile resume) throws IOException {
+        ResumeData resumeData = ResumeData.builder()
                 .creationDate(LocalDateTime.now())
-//                .extractedData(edenAIJson)
                 .fileName(resume.getOriginalFilename())
+                .extractedDataJson(edenAIJson.getBytes())
                 .file(resume.getBytes())
                 .build();
-        return resumeDataRepository.save(resumeDataEntity);
+        return resumeDataRepository.save(resumeData);
     }
 
 }

@@ -8,12 +8,12 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "skill")
-public class SkillEntity {
+public class Skill {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String skill;
     private String type;
     @ManyToOne
-    private ResumeDataEntity resumeDataEntity;
+    private ResumeData resumeData;
 }

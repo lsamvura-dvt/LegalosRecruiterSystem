@@ -8,11 +8,11 @@ import lombok.Data;
 @Builder
 @Entity
 @Table(name = "language")
-public class LanguageEntity {
+public class Language {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String language;
     @ManyToOne
-    private ResumeDataEntity resumeDataEntity;
+    private ResumeData resumeData;
 }

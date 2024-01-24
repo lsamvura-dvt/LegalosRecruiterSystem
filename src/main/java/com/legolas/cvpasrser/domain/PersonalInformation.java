@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Builder
 @Entity
 @Table(name = "personal_information")
-public class PersonalInformationEntity implements Serializable {
+public class PersonalInformation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,6 +22,6 @@ public class PersonalInformationEntity implements Serializable {
     private String profileSummary;
     private String address;
 //    private List<Skill> skills;
-    private ResumeDataEntity resumeDataEntity;
+    private ResumeData resumeData;
 
 }

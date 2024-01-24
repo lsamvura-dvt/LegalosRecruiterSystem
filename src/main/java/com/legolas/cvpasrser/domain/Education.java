@@ -8,18 +8,16 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "work_experience")
+@Table(name = "education")
 @Data
 @Builder
-public class WorkExperienceEntity implements Serializable {
+public class Education implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String title;
-    private String company;
+    private String school;
+    private String study;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String location;
-    private ResumeDataEntity resumeDataEntity;
-
+    private ResumeData resumeData;
 }

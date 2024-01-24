@@ -11,12 +11,13 @@ import java.time.LocalDateTime;
 @Table(name = "resume_data")
 @Data
 @Builder
-public class ResumeDataEntity implements Serializable {
+public class ResumeData implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String fileName;
-    private byte[] file;
-    private String extractedData;
     private LocalDateTime creationDate;
+    private byte[] file;
+    private byte[] extractedDataJson;
 }
