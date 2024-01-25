@@ -10,5 +10,5 @@ public interface ReadCVService {
      * @param resume uploaded resume file
      * @return ExtractedDataDTO POJO class populated with data exctracted from the resume
      */
-    public ExtractedDataDTO readCV(MultipartFile resume);
+    ExtractedDataDTO readCV(MultipartFile resume);
 }

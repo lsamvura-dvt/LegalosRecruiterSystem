@@ -17,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ControllerExceptionHandler {
 
-
     @ExceptionHandler({HttpClientErrorException.class, HttpServerErrorException.class})
     public ResponseEntity<ErrorResponse> handleResponseStatusException(HttpStatusCodeException ex) {
         log.error("Client exception: {}", ex.getMessage());
@@ -36,7 +35,8 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleGenericException(Exception exception) {
-        log.error("Unexpected error occurred :" + exception.getLocalizedMessage(), exception);
+        var errorMsg = String.format("Unexpected error occurred : %s", exception.getLocalizedMessage());
+        log.error(errorMsg, exception);
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse
@@ -44,7 +44,7 @@ public class ControllerExceptionHandler {
                         .reasonCodes(List.of(ReasonCode
                                 .builder()
                                 .code(500)
-                                .message(String.format("Unexpected error occurred : %s", exception.getLocalizedMessage()))
+                                .message(errorMsg)
                                 .build()))
                         .build()
                 );

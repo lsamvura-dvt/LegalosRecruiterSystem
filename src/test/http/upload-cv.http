@@ -1,0 +1,11 @@
+### Upload CV
+POST {{url}}/v1/cvreader/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="Eunice_Mhoka_CV.pdf"
+Content-Type: application/octet-stream
+
+< ./Eunice_Mhoka_CV.pdf
+--WebAppBoundary--

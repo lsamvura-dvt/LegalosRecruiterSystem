@@ -8,5 +8,5 @@ public class CertificationDTO {
     @JsonProperty("name")
     private String name;
     @JsonProperty("type")
-    private Object type;
+    private String type;
 }

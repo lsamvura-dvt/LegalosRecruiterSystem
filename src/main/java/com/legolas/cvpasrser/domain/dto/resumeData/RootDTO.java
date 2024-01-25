@@ -10,5 +10,5 @@ public class RootDTO {
     @JsonProperty("extracted_data")
     private ExtractedDataDTO extractedData;
     @JsonProperty("cost")
-    private double cost;
+    private Double cost;
 }

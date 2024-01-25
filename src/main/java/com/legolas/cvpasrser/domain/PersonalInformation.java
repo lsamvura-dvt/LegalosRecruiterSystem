@@ -1,8 +1,10 @@
 package com.legolas.cvpasrser.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -10,6 +12,8 @@ import java.io.Serializable;
 @Builder
 @Entity
 @Table(name = "personal_information")
+@NoArgsConstructor
+@AllArgsConstructor
 public class PersonalInformation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +25,8 @@ public class PersonalInformation implements Serializable {
     private String currentProfession;
     private String profileSummary;
     private String address;
-//    private List<Skill> skills;
+    //    private List<Skill> skills;
+    @ManyToOne
     private ResumeData resumeData;
 
 }

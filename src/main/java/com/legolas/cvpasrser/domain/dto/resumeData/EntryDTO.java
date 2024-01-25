@@ -3,6 +3,8 @@ package com.legolas.cvpasrser.domain.dto.resumeData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class EntryDTO {
 
