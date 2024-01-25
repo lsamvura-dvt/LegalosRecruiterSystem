@@ -23,7 +23,7 @@ public class EdenAIClient {
     private final RestTemplate restTemplate;
     private final EdenAIProperties edenAIProperties;
 
-    public Map<String, Object> getResumeMetadata(ByteArrayResource file) {
+    public String getResumeMetadata(ByteArrayResource file) {
         log.info("Eden ai providers:{}", edenAIProperties.getProviders());
         log.info("Eden ai url:{}", edenAIProperties.getUrl());
         log.info("Eden ai token:{}", edenAIProperties.getToken());
@@ -37,7 +37,7 @@ public class EdenAIClient {
         body.add("fallback_providers", "");
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<Map> responseEntity = restTemplate.postForEntity(edenAIProperties.getUrl(), requestEntity, Map.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(edenAIProperties.getUrl(), requestEntity, String.class);
 
         return responseEntity.getBody();
 
