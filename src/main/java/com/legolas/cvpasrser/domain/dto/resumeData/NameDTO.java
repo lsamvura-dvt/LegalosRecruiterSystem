@@ -24,5 +24,5 @@ public class NameDTO {
     private Object prefix;
 
     @JsonProperty("sufix")
-    private Object suffix;
+    private String suffix;
 }

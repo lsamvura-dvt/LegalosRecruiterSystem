@@ -8,7 +8,7 @@ import java.util.ArrayList;
 @Data
 public class EducationDTO {
     @JsonProperty("total_years_education")
-    private Object totalYearsEducation;
+    private Integer totalYearsEducation;
     @JsonProperty("entries")
     private ArrayList<EntryDTO> entries;
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class WorkExperienceDTO {
 
     @JsonProperty("total_years_experience")
-    private Object totalYearsExperience;
+    private String totalYearsExperience;
 
     @JsonProperty("entries")
     private ArrayList<EntryDTO> entries;

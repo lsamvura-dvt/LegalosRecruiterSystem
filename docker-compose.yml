@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=legalos
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Ar3w3s@f3

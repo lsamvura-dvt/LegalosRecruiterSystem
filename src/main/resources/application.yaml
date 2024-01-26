@@ -3,9 +3,9 @@ spring:
     name: gateway-claim
   datasource:
     driver-class-name: org.postgresql.Driver
-    password: Ar3w3s@f3
     url: jdbc:postgresql://localhost:5432/legalos
     username: postgres
+    password: Ar3w3s@f3
   jpa:
     hibernate:
       ddl-auto: create
@@ -19,3 +19,8 @@ edenai:
   providers:
     - senseloaf
     - affinda
+
+
+springdoc:
+  swagger-ui:
+    path:

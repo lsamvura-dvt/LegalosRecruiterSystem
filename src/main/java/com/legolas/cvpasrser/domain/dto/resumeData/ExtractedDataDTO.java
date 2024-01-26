@@ -19,10 +19,10 @@ public class ExtractedDataDTO {
     private ArrayList<SkillDTO> skills;
     @JsonProperty("certifications")
     private ArrayList<CertificationDTO> certifications;
-    @JsonProperty("courses")
-    private ArrayList<Object> courses;
-    @JsonProperty("privateations")
-    private ArrayList<Object> privateations;
-    @JsonProperty("interests")
-    private ArrayList<Object> interests;
+    //@JsonProperty("courses")
+    //private ArrayList<Object> courses;
+    //@JsonProperty("privateations")
+    //private ArrayList<Object> privateations;
+    //@JsonProperty("interests")
+    //private ArrayList<Object> interests;
 }

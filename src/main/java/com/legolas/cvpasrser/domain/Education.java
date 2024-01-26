@@ -1,8 +1,10 @@
 package com.legolas.cvpasrser.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -11,6 +13,8 @@ import java.time.LocalDate;
 @Table(name = "education")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Education implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,5 +23,6 @@ public class Education implements Serializable {
     private String study;
     private LocalDate startDate;
     private LocalDate endDate;
+    @ManyToOne
     private ResumeData resumeData;
 }

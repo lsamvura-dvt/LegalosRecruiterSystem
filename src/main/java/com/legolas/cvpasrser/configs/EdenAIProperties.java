@@ -1,16 +1,12 @@
-package com.legolas.cvpasrser.utils;
+package com.legolas.cvpasrser.configs;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
 @Data
-@Configuration
 @ConfigurationProperties(prefix = "edenai")
-@NoArgsConstructor
 public class EdenAIProperties {
     private String url;
 

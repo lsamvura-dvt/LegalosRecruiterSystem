@@ -36,7 +36,8 @@ public class ReadCVServiceImpl implements ReadCVService {
                     return resume.getOriginalFilename();
                 }
             };
-            return saveResumeDataService.save(edenAIClient.getResumeMetadata(file), resume);
+            String responseJson = edenAIClient.getResumeMetadata(file);
+            return saveResumeDataService.save(responseJson, resume);
 
         } catch (IOException e) {
             log.info(String.format("Error reading file: %s", e.getMessage()));

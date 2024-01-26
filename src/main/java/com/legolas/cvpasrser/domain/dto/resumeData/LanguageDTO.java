@@ -9,6 +9,6 @@ public class LanguageDTO {
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("code")
-    private Object code;
+//    @JsonProperty("code")
+//    private Object code;
 }

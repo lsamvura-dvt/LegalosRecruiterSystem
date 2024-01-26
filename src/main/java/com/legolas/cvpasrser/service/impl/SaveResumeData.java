@@ -1,11 +1,13 @@
 package com.legolas.cvpasrser.service.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.legolas.cvpasrser.domain.*;
 import com.legolas.cvpasrser.domain.dto.resumeData.*;
 import com.legolas.cvpasrser.repository.*;
 import com.legolas.cvpasrser.service.SaveResumeDataService;
 import com.legolas.cvpasrser.utils.Utils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,38 +24,28 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SaveResumeData implements SaveResumeDataService {
 
-    private final ObjectMapper mapper;
     private final ResumeDataRepository resumeDataRepository;
     private final PersonalInformationRepository personalInformationRepository;
     private final EducationRepository educationRepository;
     private final WorkExperienceRepository workExperienceRepository;
     private final SkillRepository skillRepository;
     private final LanguageRepository languageRepository;
-
-    @Autowired
-    public SaveResumeData(ObjectMapper mapper, ResumeDataRepository resumeDataRepository, PersonalInformationRepository personalInformationRepository,
-                          EducationRepository educationRepository, WorkExperienceRepository workExperienceRepository, SkillRepository skillRepository,
-                          LanguageRepository languageRepository) {
-        this.mapper = mapper;
-        this.resumeDataRepository = resumeDataRepository;
-        this.personalInformationRepository = personalInformationRepository;
-        this.educationRepository = educationRepository;
-        this.workExperienceRepository = workExperienceRepository;
-        this.skillRepository = skillRepository;
-        this.languageRepository = languageRepository;
-    }
-
+    private final ObjectMapper objectMapper;
 
     @Override
-    public ExtractedDataDTO save(Map<String, Object> responseData, MultipartFile resume) {
+    public ExtractedDataDTO save(String responseJson, MultipartFile resume) {
         try {
-            JSONObject responseDataJsonObject = new JSONObject(responseData);
-            //making use of eden-ai body as it combines outputs from the different providers to give a more refined response
-            String extractedJsonData = responseDataJsonObject.getJSONObject("eden-ai").getJSONObject("extracted_data").toString();
-            ExtractedDataDTO extractedData = mapper.readValue(extractedJsonData, ExtractedDataDTO.class);
-            ResumeData resumeData = saveResumeExtractedData(extractedJsonData, resume);
+
+            JsonNode responseNode = objectMapper.readTree(responseJson);
+            JsonNode edenAiNode = responseNode.get("eden-ai");
+            JsonNode extractedDataNode = edenAiNode.get("extracted_data");
+
+            ExtractedDataDTO extractedData = objectMapper.treeToValue(extractedDataNode, ExtractedDataDTO.class);
+
+            ResumeData resumeData = saveResumeExtractedData(extractedDataNode.asText(), resume);
             savePersonalInformation(resumeData, extractedData.getPersonalInfos());
             saveLanguage(resumeData, extractedData.getLanguages());
             saveSkills(resumeData, extractedData.getSkills());

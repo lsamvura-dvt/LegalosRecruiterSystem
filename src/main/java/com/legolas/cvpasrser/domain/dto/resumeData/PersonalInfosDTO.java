@@ -3,6 +3,7 @@ package com.legolas.cvpasrser.domain.dto.resumeData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 @Data
@@ -16,9 +17,9 @@ public class PersonalInfosDTO {
     @JsonProperty("objective")
     private String objective;
     @JsonProperty("date_of_birth")
-    private Object dateOfBirth;
+    private LocalDate dateOfBirth;
     @JsonProperty("placeOfBirth")
-    private Object place_of_birth;
+    private String place_of_birth;
     @JsonProperty("phones")
     private ArrayList<String> phones;
     @JsonProperty("mails")
@@ -30,7 +31,7 @@ public class PersonalInfosDTO {
     @JsonProperty("currentProfession")
     private String current_profession;
     @JsonProperty("gender")
-    private Object gender;
+    private String gender;
     @JsonProperty("nationality")
     private String nationality;
     @JsonProperty("martial_status")
